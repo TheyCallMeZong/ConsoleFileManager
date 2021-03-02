@@ -43,7 +43,7 @@ namespace Console_File_Manager
                 foreach (FileInfo e in g)
                 {
                     Console.SetCursorPosition(60, b);
-                    Console.Write(level + "-" + e.ToString().Remove(0, path.Length));
+                    Console.Write(level + "-" + e.ToString().Remove(0, path.Length - 1));
                     Yellow();
                     Console.WriteLine(" Size: " + e.Length + " bytes");
                     White();

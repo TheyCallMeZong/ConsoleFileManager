@@ -16,6 +16,7 @@ namespace Console_File_Manager
             Console.WriteLine(Commands.crd + " - create directory");
             Console.WriteLine(Commands.read + " - read text in file");
             Console.WriteLine(Commands.write + " - write text in file");
+            Console.WriteLine(Commands.ren + " - rename file");
             Console.WriteLine(Commands.def + " - delete file");
             Console.WriteLine(Commands.dld + " - delete directory");
             Console.WriteLine(Commands.move + " - move file");

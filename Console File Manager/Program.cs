@@ -199,14 +199,13 @@ namespace Console_File_Manager
                     #region Name is read
                     case "read":
                         if (File.Exists(path + path1))
-                        {
                             using (StreamReader sr = File.OpenText(path + path1))
                             {
                                 string s = "";
                                 while ((s = sr.ReadLine()) != null)
-                                    Console.WriteLine(s);
+                                    Console.Write(s);
+                                Console.WriteLine();
                             }
-                        }
                         else { Red(); Console.WriteLine("File not found"); White(); }
                     break;
                     #endregion
@@ -225,7 +224,30 @@ namespace Console_File_Manager
                             FileCreate.FileCreator(path, path1);
                         break;
                     #endregion
-
+                    #region Name is ren
+                    case "ren":
+                        if (File.Exists(path + path1))
+                        {
+                            Console.WriteLine($"What do you want to name the file {path1}?");
+                            string rename = Console.ReadLine();
+                            if (rename != path1)
+                            {
+                                string[] text = File.ReadAllLines(path + path1);
+                                File.Create(rename);
+                                File.Delete(path + path1);
+                                File.AppendAllLines(path + rename, text);
+                                Clear();
+                                GetFiles(path);
+                                Green();
+                                Console.WriteLine("File was renamed");
+                                White();
+                            }
+                            else { Console.WriteLine("You can`t also name a file"); }
+                        }
+                        else
+                            Console.WriteLine("File not found");
+                        break;
+                    #endregion
                     #region Реализованные команды
                     case "help":
                         Assistant();
