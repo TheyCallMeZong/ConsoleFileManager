@@ -23,6 +23,7 @@ namespace Console_File_Manager
                 GetFiles(path); Green();
                 Console.WriteLine("File was created"); White();
             }
+
         }
     }
 }

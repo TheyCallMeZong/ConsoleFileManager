@@ -9,6 +9,7 @@
             dld, //delete directory (удаляем директорию)
             move, //move file (переместить файл)
             cf, //create file (создать файл)
+            ren, //rename file (переименовать файл
             crd, //create directory (создать директорию)
             read, //прочитать содержимое файла
             write, //записать что нибудь в файл

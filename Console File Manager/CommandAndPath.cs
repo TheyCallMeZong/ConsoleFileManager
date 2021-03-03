@@ -21,7 +21,7 @@
                 mainCommand = command.Substring(0, 2);
                 path = command.Remove(0, 3);
             }
-            else if (command.Contains("dld ") || command.Contains("def ") || command.Contains("crd "))
+            else if (command.Contains("dld ") || command.Contains("def ") || command.Contains("crd ") || command.Contains("ren "))
             {
                 mainCommand = command.Substring(0, 3);
                 path = command.Remove(0, 4);
