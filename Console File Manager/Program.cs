@@ -67,7 +67,7 @@ namespace Console_File_Manager
                                 var e = Directory.GetParent(path.Substring(0, path.Length - 1));
                                 Clear();
                                 path = e.ToString() + @"\";
-                                GetFiles(path +@"\");
+                                GetFiles(path + @"\");
                             }
                             catch { Clear(); Drives.GetDrives(); path = null; }
 
@@ -267,7 +267,8 @@ namespace Console_File_Manager
                         break;
                     case "clear":
                         Clear();
-                        if (!string.IsNullOrEmpty(path)) { GetFiles(path + @"\"); path += @"\"; } 
+                        if (!string.IsNullOrEmpty(path)) 
+                            GetFiles(path + @"\"); 
                         else  Drives.GetDrives();
                         break;
                     default:
