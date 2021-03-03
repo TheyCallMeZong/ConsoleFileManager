@@ -5,7 +5,6 @@ using static Console_File_Manager.Help;
 using static Console_File_Manager.Color;
 using System.Threading;
 using System.IO;
-using System.Text;
 
 namespace Console_File_Manager
 {
@@ -13,7 +12,7 @@ namespace Console_File_Manager
     {
         static void Main()
         {
-            #region
+            #region Первоначальыне настройки
             Console.SetWindowSize(180, 45);
             Assistant();
             Console.Write("Click any button to get started");
@@ -58,19 +57,19 @@ namespace Console_File_Manager
                         //уровень без указания полного имени каталога
                         {
                             Clear();
-                            path += path1 + @"\";
+                            path += (path1 + @"\");
                             GetFiles(path);
                         }
                         else if (string.IsNullOrEmpty(path1)) //если пользователь ввел cd, то мы возвращаемся в предыдущюю папку 
                         {
                             try
                             {
-                                var e = Directory.GetParent(path);
+                                var e = Directory.GetParent(path.Substring(0, path.Length - 1));
                                 Clear();
-                                path = e.ToString();
-                                GetFiles(path + @"\");
+                                path = e.ToString() + @"\";
+                                GetFiles(path +@"\");
                             }
-                            catch { Drives.GetDrives(); }
+                            catch { Clear(); Drives.GetDrives(); path = null; }
 
                         }
                         //а если пользователь написал команду cd и неизвестную комбинацию
@@ -97,9 +96,7 @@ namespace Console_File_Manager
                                         var directory = new DirectoryInfo(path + path1);
                                         var fi = directory.GetFiles();
                                         foreach (var f in fi)
-                                        {
                                             f.Delete();
-                                        }
                                         Directory.Delete(path + path1 + @"\", true);
                                     }
                                     catch (Exception) {Console.WriteLine("Access error");}
@@ -143,9 +140,19 @@ namespace Console_File_Manager
                     #endregion
                     #region Name is move
                     case "move":
-                        string[] vs = path1.Split(' '); //помимо команды и файла, нам еще передается путь, куда нужно переместить файл
-                        path1 = vs[0];
-                        string pathFrom = vs[1]; //директория в которую мы будем перемещать файл
+                        if (string.IsNullOrEmpty(path1))
+                        {
+                            Console.WriteLine("Specify file");
+                            continue;
+                        }
+                        string pathFrom = "";
+                        try
+                        {
+                            string[] vs = path1.Split(' '); //помимо команды и файла, нам еще передается путь, куда нужно переместить файл
+                            path1 = vs[0]; //сам файл
+                            pathFrom = vs[1]; //директория в которую мы будем перемещать файл
+                        }
+                        catch { Console.WriteLine("Specify directory"); }
                         if (File.Exists(path + path1))
                         {
                             if (File.Exists(pathFrom + @"\" + path1))
@@ -203,8 +210,7 @@ namespace Console_File_Manager
                             {
                                 string s = "";
                                 while ((s = sr.ReadLine()) != null)
-                                    Console.Write(s);
-                                Console.WriteLine();
+                                    Console.WriteLine(s);
                             }
                         else { Red(); Console.WriteLine("File not found"); White(); }
                     break;
@@ -216,7 +222,7 @@ namespace Console_File_Manager
                             Yellow();
                             Console.WriteLine("Specify the information you want to enter in the file");
                             White();
-                            var filetext = Console.ReadLine();
+                            string filetext = Console.ReadLine();
                             File.AppendAllText(path + path1, "\n" + filetext);
 
                         }
@@ -225,7 +231,11 @@ namespace Console_File_Manager
                         break;
                     #endregion
                     #region Name is ren
-                    case "ren":
+                    case "ren": //т.к. я не нашел метода, который смог бы переименовывать файл, то я сделал так: 
+                        //1) я сохранил все строки, хранящиеся в указанном файле
+                        //2) создал новый файл, уже с новым именем
+                        //3) добавил туда все строки, которые сохранил до этого
+                        //4) удалил прошлый файл
                         if (File.Exists(path + path1))
                         {
                             Console.WriteLine($"What do you want to name the file {path1}?");
@@ -257,8 +267,8 @@ namespace Console_File_Manager
                         break;
                     case "clear":
                         Clear();
-                        try { GetFiles(path); }
-                        catch { Drives.GetDrives(); }
+                        if (!string.IsNullOrEmpty(path)) { GetFiles(path + @"\"); path += @"\"; } 
+                        else  Drives.GetDrives();
                         break;
                     default:
                         Red();
@@ -269,6 +279,7 @@ namespace Console_File_Manager
                 }
 
             }
+            
         }
     }
 }
